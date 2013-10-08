@@ -162,3 +162,77 @@ ten'ten = take 10 (repeat 10)
 -- Although it's simpler to just use the replicate function if you want some
 -- number of the same element in a list.
 replQ = replicate 10 'Q'
+-- "QQQQQQQQQQ"
+
+-- List comprehension
+--
+-- List comprehensions are very similar to set comprehensions. We'll stick to
+-- getting the first 10 even numbers for now.
+list1 = [x * 2 | x <- [1..10]]
+-- [2,4,6,8,10,12,14,16,18,20]
+--
+--Now let's add a condition (or a predicate) to that comprehension. Predicates
+--go after the binding parts and are separated from them by a comma. Let's say
+--we want only the elements which, doubled, are greater than or equal to 12.
+list2 = [x * 2 | x <- [1..20], x * 2 >= 12]
+-- [12,14,16,18,20,22,24,26,28,30,32,34,36,38,40]
+--
+-- Note that weeding out lists by predicates is also called filtering.
+list3 = [x | x <- [50..100], mod x 7 == 3]
+-- [52,59,66,73,80,87,94]
+--
+boomBangs xs = [if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]
+boomBangs7'13 = boomBangs [7..13]
+-- ["BOOM!","BOOM!","BANG!","BANG!"]
+--
+list4 = [x | x <- [10..20], x /= 13, x /= 15, x /= 19]
+-- [10,11,12,14,16,17,18,20]
+list5 = [x ++ y | x <- ["a","b","c"], y <- ["1","2"]]
+-- ["a1","a2","b1","b2","c1","c2"]
+--
+length' xs = sum [1 | _ <- xs]
+removeNonUpperCase st = [c | c <- st, c `elem` ['A'..'Z']]
+iLikeJava = removeNonUpperCase "Idon'tLIKEJAVA"
+-- "ILIKEJAVA"
+list6 = [[1,2,3,4,5,6],[7,8,1,2],[9,1,2,7,2,5,8]]
+list6Even = [[x | x <- xs, even x] | xs <- list6]
+-- [[2,4,6],[8,2],[2,2,8]]
+--
+-- Tuples
+--
+-- In some ways, tuples are like lists — they are a way to store several values
+-- into a single value.
+--
+-- ()
+-- (1,2)
+-- [(1,'a'),(8,'b'),(92,'z')]
+--
+-- Two useful functions that operate on pairs:
+--
+-- fst takes a pair and returns its first component.
+fst1 = fst (8,11)
+-- 8
+fst2 = fst ("abc", 99)
+-- "abc"
+--
+-- snd takes a pair and returns its second component. Surprise!
+snd1 = snd (8,11)
+-- 11
+snd2 = snd ("abc", 99)
+-- 99
+--
+-- zip. It takes two lists and then zips them together into one list by joining
+-- the matching elements into pairs.
+--
+zip1 = zip [1,2,3,4,5] [5,5,5,5,5]
+-- [(1,5),(2,5),(3,5),(4,5),(5,5)]
+zip2 = zip [1..] ["apple", "orange", "cherry", "mango"]
+-- [(1,"apple"),(2,"orange"),(3,"cherry"),(4,"mango")]
+--
+-- Example
+-- Here's a problem that combines tuples and list comprehensions: which right
+-- triangle that has integers for all sides and all sides equal to or smaller
+-- than 10 has a perimeter of 24?
+--
+triangles = [(a,b,c) | c <- [1..10], b <- [1..c], a <- [1..b],
+            a^2 + b^2 == c^2, a+b+c == 24]
